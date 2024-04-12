@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from openai import OpenAI
 import json
+import os
 
 app = Flask(__name__)
 client = OpenAI()
@@ -8,6 +9,8 @@ client = OpenAI()
 
 @app.route('/')
 def index():
+    key = os.environ.get('OPENAI_API_KEY')
+    print(key)
     return render_template('index.html')
 
 # ___________________
@@ -17,23 +20,15 @@ def techyT():
 # ___________________
 @app.route('/cardJS')
 def cardJS():
-    # key = os.environ.get('OPENAI_API_KEY')
-    # return key
     return render_template("cardJS.html")
 @app.route('/harry')
 def harry():
-    # key = os.environ.get('OPENAI_API_KEY')
-    # return key
     return render_template("harry.html")
 @app.route('/comedyJS')
 def comedyJS():
-    # key = os.environ.get('OPENAI_API_KEY')
-    # return key
     return render_template("comedyJS.html")
 @app.route('/triviabot')
 def triviabot():
-    # key = os.environ.get('OPENAI_API_KEY')
-    # return key
     return render_template("triviabot.html")
 
 @app.route("/chat")
