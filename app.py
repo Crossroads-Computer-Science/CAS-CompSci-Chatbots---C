@@ -20,17 +20,17 @@ def cardJS():
     # key = os.environ.get('OPENAI_API_KEY')
     # return key
     return render_template("cardJS.html")
-@app.route('/JS')
-def indexJS():
+@app.route('/harry')
+def harry():
     # key = os.environ.get('OPENAI_API_KEY')
     # return key
-    return render_template("indexJS.html")
-@app.route('/comedyJamie')
+    return render_template("harry.html")
+@app.route('/comedyJS')
 def comedyJS():
     # key = os.environ.get('OPENAI_API_KEY')
     # return key
     return render_template("comedyJS.html")
-@app.route('/triviaJS')
+@app.route('/triviabot')
 def triviabot():
     # key = os.environ.get('OPENAI_API_KEY')
     # return key
