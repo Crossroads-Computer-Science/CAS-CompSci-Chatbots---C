@@ -15,7 +15,26 @@ def index():
 def techyT():
     return render_template('techyTim.html')
 # ___________________
-
+@app.route('/cardJS')
+def cardJS():
+    # key = os.environ.get('OPENAI_API_KEY')
+    # return key
+    return render_template("cardJS.html")
+@app.route('/JS')
+def indexJS():
+    # key = os.environ.get('OPENAI_API_KEY')
+    # return key
+    return render_template("indexJS.html")
+@app.route('/comedyJamie')
+def comedyJS():
+    # key = os.environ.get('OPENAI_API_KEY')
+    # return key
+    return render_template("comedyJS.html")
+@app.route('/triviaJS')
+def triviabot():
+    # key = os.environ.get('OPENAI_API_KEY')
+    # return key
+    return render_template("triviabot.html")
 
 @app.route("/chat")
 def chat_completion():
