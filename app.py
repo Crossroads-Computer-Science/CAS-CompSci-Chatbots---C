@@ -11,7 +11,9 @@ def index():
     return render_template('index.html')
 
 # ___________________
-# YOUR ROUTE HERE
+@app.route('/techyT')
+def techyT():
+    return render_template('techyTim.html')
 # ___________________
 
 
