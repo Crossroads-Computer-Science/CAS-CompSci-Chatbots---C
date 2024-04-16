@@ -33,6 +33,9 @@ def triviabot():
 @app.route("/GuessWho")
 def guesswho():
     return render_template("GuessWhoBot.html")
+@app.route("/animate")
+def animate():
+    return render_template("animate.html")
 
 @app.route("/chat")
 def chat_completion():
@@ -43,6 +46,7 @@ def chat_completion():
         model="gpt-3.5-turbo",
         messages=messages
     )
+
     return str(completion.choices[0].message.content)
 
 

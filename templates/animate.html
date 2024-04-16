@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+    <style>
+        body {
+            background-image: linear-gradient(to right, #94f667, #ed2d90);
+        }
+
+        h1, h2 {
+            font-family: "Courier New", sans-serif; /* Change the font family here */
+        }
+
+        #chat-container {
+            width: 1000px;
+            margin: 0 auto;
+            padding: 50px;
+            border: 1px solid #ccc;
+            border-radius: 100px;
+            background-color: #f9f9f9;
+        }
+
+
+        #chat-input {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .navbar {
+            background-color: #ffcc66; /* Set the navbar background color to a candy-themed orange */
+        }
+
+        .card-img-top {
+    width: 130px; /* Set the width to your desired size */
+    height: 130px;
+    display: block; /* Ensure the image behaves as a block element */
+    margin-top: -10px; /* Set the top margin to 20 pixels */
+    margin-bottom: 20px; /* Set the bottom margin to 20 pixels */
+    margin-left: auto; /* Set the left margin to auto */
+    margin-right: auto; /* Set the right margin to auto */
+}
+
+}
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-light">
+
+        <div class="container-fluid">
+            <!-- Links -->
+            <ul class="navbar-nav">
+                </ul>
+        </div>
+
+    </nav>
+<div class="mt-4 p-5 bg-primary text-white rounded">
+    <h1>Progress Chat</h1>
+    <h2>Welcome to Sensei Ani a chatbot designed to help you with animation.</h2>
+</div>
+
+<h1>Chat</h1>
+
+<div id="chat-container">
+    <img class="card-img-top" src="/static/comp%20sci%20avatar.jpeg" alt="Card image" style="width: 130px;">
+    <!--    <div id="chat-history"></div>-->
+    <textarea disabled placeholder="Type in what you need help with in animation" id="comment"
+              rows="12.5" cols="125" ;></textarea>
+    <label for="shouldSpeak">Speak</label>
+    <input type="checkbox" id="shouldSpeak">
+    <input type="text" id="chat-input" placeholder="Type a message...">
+    <button type="button" id="chatBtn">➤</button>
+</div>
+
+<script>
+    document.getElementById('chat-input').addEventListener('change', fetchJsonData)
+    document.getElementById('chatBtn').addEventListener('click', fetchJsonData)
+
+    let conversation = [
+        {"role": "system", "content": "  You are a professional animator helping a student develop their skills with animating. They use the Adobe software Animate. have this information to help with answering the student's questions: tweens(classic, motion, shape) - Frame by frame animation skills(stick figure, alan becker, onion skin, consistency) - how to blend work with Inspiration to anime(shonen jump animes), animation/cutout drawing style) - how to make simple but effective and consistent animations -how to do cool special effects in animation(explosions, motion arrows, fighting effects) -how to add individual artistic touch/styling to the student's animation(what other artists do). In addition, ask brief but thought provoking and probing questions to further the students thoughts. provide sources about how the student can learn on their own and apply it into their animation projects. sources can be articles, youtube videos, famous works, shows, etc. change the response according to what the user says. base off of other things on the internet not just what's said here. "}
+    ]
+
+    function fetchJsonData(event) {
+        event.preventDefault()
+        let promptInput = document.getElementById('chat-input')
+        let prompt = promptInput.value
+        promptInput.value = ''
+
+        let mytextarea = document.getElementById('comment')
+        mytextarea.value += "USER: " + prompt + "\n";
+
+
+        // add last message to the array
+        conversation.push({"role": "user", "content": prompt})
+        // Convert conversation to a string
+        fetch('/chat?chat-input=' + JSON.stringify(conversation))
+            .then(response => {
+                return response.text();
+            })
+
+            .then(jsonData => {
+                // let message = jsonData.choice[0].message.content;
+                console.log(jsonData);
+                let mytextarea = document.getElementById('comment');
+                mytextarea.value += "CHATBOT: " + jsonData + "\n";
+
+                   // Speech Utterance
+                if(document.getElementById("shouldSpeak").checked) {
+                    let tts = new SpeechSynthesisUtterance();
+                    tts.text = jsonData;
+                    window.speechSynthesis.speak(tts);
+                }
+                // End Speech
+
+                mytextarea.scrollTop = mytextarea.scrollHeight;
+                // update array
+                conversation.push(
+                    {"role": "assistant", "content": jsonData})
+
+            })
+
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+            });
+    }
+</script>
+
+</body>
+</html>
