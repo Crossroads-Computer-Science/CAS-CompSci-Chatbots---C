@@ -41,6 +41,10 @@ def animate():
 def techhelp():
     return render_template("techHelp.html")
 
+@app.route("/language")
+def language():
+    return render_template("language.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')
