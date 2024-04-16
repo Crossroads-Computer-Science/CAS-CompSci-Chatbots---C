@@ -45,6 +45,10 @@ def techhelp():
 def language():
     return render_template("language.html")
 
+@app.route("/WiseOldManChat")
+def WiseOldManChat():
+    return render_template("WiseOldManChat.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')

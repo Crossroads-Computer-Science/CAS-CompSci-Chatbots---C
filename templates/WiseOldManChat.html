@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Wise Old Man Chat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: Futura, monospace;
+            background-color: #222;
+            color: #fff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .chat-container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-top: 20px;
+            background-color: #333;
+        }
+        #comment {
+            resize: none;
+            background-color: #444;
+            color: #fff;
+        }
+        #chatBtn {
+            margin-top: 10px;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        #chatBtn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        /* Adjustments */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .toggle-container label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="chat-container">
+            <img src="/static/oldman.png" style="width: 130px;">
+            <h2 class="mt-3">A wise old man</h2>
+            <h6>A wise old man who only talks in analogies. Maybe ask him for life advice?</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3 mt-3">
+                <label for="comment">Chat:</label>
+                <textarea disabled class="form-control" rows="10" id="comment" name="text"></textarea>
+                <hr class="mt-4 mb-4">
+                <input type="text" id="prompt" class="form-control mb-3"/>
+                <div class="toggle-container">
+                    <label for="shouldSpeak">Speak</label>
+                    <input type="checkbox" id="shouldSpeak">
+                </div>
+                <button type="button" class="btn btn-primary" id="chatBtn">Chat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('prompt').addEventListener('change', fetchJsonData);
+
+    let conversation = [
+        {"role": "system", "content": "You are a wise old man who only talks in analogies. try to give life advice. "}
+    ]
+    function fetchJsonData(event) {
+        event.preventDefault();
+        let promptInput = document.getElementById('prompt')
+        let prompt = promptInput.value
+        promptInput.value = "";
+
+        let mytextarea = document.getElementById('comment');
+        mytextarea.value += "USER: " + prompt + "\n";
+
+        // add last message to the array
+        conversation.push({"role":"user", "content": prompt})
+        // Convert conversation to a string
+        fetch('/chat?prompt=' + JSON.stringify(conversation))
+            .then(response => {
+                return response.text();
+            })
+            .then(jsonData => {
+                console.log(jsonData);
+                let mytextarea = document.getElementById('comment');
+                mytextarea.value += "CHATBOT: " + jsonData + "\n";
+
+                // Speech Utterance
+                if(document.getElementById("shouldSpeak").checked) {
+                    let tts = new SpeechSynthesisUtterance();
+                    tts.text = jsonData;
+                    window.speechSynthesis.speak(tts);
+                }
+                // End Speech
+
+                mytextarea.scrollTop = mytextarea.scrollHeight;
+                // update array
+                conversation.push({"role":"assistant", "content": jsonData})
+            })
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+            });
+    }
+</script>
+</body>
+</html>
