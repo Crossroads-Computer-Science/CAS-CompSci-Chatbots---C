@@ -37,6 +37,10 @@ def guesswho():
 def animate():
     return render_template("animate.html")
 
+@app.route("/techHelp")
+def techhelp():
+    return render_template("techHelp.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')
