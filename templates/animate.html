@@ -96,7 +96,7 @@
         // add last message to the array
         conversation.push({"role": "user", "content": prompt})
         // Convert conversation to a string
-        fetch('/chat?chat-input=' + JSON.stringify(conversation))
+        fetch('/chat?prompt=' + JSON.stringify(conversation))
             .then(response => {
                 return response.text();
             })
