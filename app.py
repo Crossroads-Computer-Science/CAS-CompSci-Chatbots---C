@@ -30,6 +30,9 @@ def comedyJS():
 @app.route('/triviabot')
 def triviabot():
     return render_template("triviabot.html")
+@app.route("/GuessWho")
+def guesswho():
+    return render_template("GuessWhoBot.html")
 
 @app.route("/chat")
 def chat_completion():
