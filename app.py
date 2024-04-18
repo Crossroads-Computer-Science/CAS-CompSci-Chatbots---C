@@ -13,6 +13,10 @@ def index():
     print(key)
     return render_template('index.html')
 
+@app.route('/batty')
+def batty():
+    return render_template('BatmanBot.html')
+
 # ___________________
 @app.route('/techyT')
 def techyT():
