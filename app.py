@@ -18,6 +18,14 @@ def index():
 def techyT():
     return render_template('techyTim.html')
 # ___________________
+
+
+@app.route('/aboBot')
+def abobot():
+    key = os.environ.get('OPENAI_API_KEY')
+    print(key)
+    return render_template("aboBot.html")
+
 @app.route('/cardJS')
 def cardJS():
     return render_template("cardJS.html")
