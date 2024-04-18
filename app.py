@@ -53,6 +53,10 @@ def WiseOldManChat():
 def TwentyQuestions():
     return render_template("twentyquestions.html")
 
+@app.route("/fun")
+def have_fun():
+    return render_template("fun.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenAIVersion1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body style="background-color: coral">
+<div class="mt-4 p-4 bg-primary text-white rounded" style="background: blue">
+    <h1>Fun Facts!</h1>
+    <p>A chatbot designed to give you a fun fact about literally anything!</p>
+</div>
+<label for="comment"></label>
+
+<h3 style="padding-left: 10px">Chat</h3>
+<textarea id="comment" disabled
+          placeholder="Welcome to fun fact generator - ask me to generate you a fun fact about literally anything"
+          name="comment" rows="7" cols="100"
+          style="margin-left: 10px; background-color: lightgray">
+</textarea>
+<p></p>
+
+<label for="prompt"></label>
+<label for="shouldSpeak">Speak</label>
+<input type="checkbox" id="shouldSpeak">
+<hr/>
+<input type="text" id="prompt" style="width: 1000px; margin-left: 5px;">
+<p></p>
+<button type="button" id="chatBtn" class="btn btn-primary" style="margin-left: 10px">CHAT</button>
+<script>
+    document.getElementById('prompt').addEventListener('change', fetchJsonData);
+    document.getElementById('chatBtn').addEventListener('click', fetchJsonData);
+    let conversation = [
+        {"role": "system", "content": "Tell me a fun fact about "}
+    ]
+
+
+    function fetchJsonData(event) {
+        event.preventDefault();
+        let promptInput = document.getElementById('prompt')
+        let prompt = promptInput.value
+        promptInput.value = "";
+
+        let mytextarea = document.getElementById('comment');
+        mytextarea.value += "USER: " + prompt + "\n" + "\n";
+
+        // add last message to the array
+        conversation.push({"role": "user", "content": prompt})
+        // Convert conversation to a string
+        fetch('/chat?prompt=' + JSON.stringify(conversation))
+            .then(response => {
+                // return response.json
+                return response.text();
+            })
+            .then(jsonData => {
+                console.log(jsonData);
+                let mytextarea = document.getElementById('comment');
+                mytextarea.value += "CHATBOT: " + jsonData + "\n" + "\n";
+
+
+                // Speech Utterance
+                if(document.getElementById("shouldSpeak").checked) {
+                    let tts = new SpeechSynthesisUtterance();
+                    tts.text = jsonData;
+                    window.speechSynthesis.speak(tts);
+                }
+
+                // End Speech
+                mytextarea.scrollTop = mytextarea.scrollHeight;
+                // update array
+                conversation.push(
+                    {"role": "assistant", "content": jsonData})
+
+            })
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+            });
+    }
+</script>
+</body>
+</html>
