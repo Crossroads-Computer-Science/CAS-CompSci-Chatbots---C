@@ -57,6 +57,10 @@ def TwentyQuestions():
 def have_fun():
     return render_template("fun.html")
 
+@app.route('/song')
+def song():
+    return render_template("SongBot.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')
