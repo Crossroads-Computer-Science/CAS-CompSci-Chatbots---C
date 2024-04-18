@@ -49,6 +49,10 @@ def language():
 def WiseOldManChat():
     return render_template("WiseOldManChat.html")
 
+@app.route("/twenty")
+def TwentyQuestions():
+    return render_template("twentyquestions.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')
