@@ -45,6 +45,11 @@ def guesswho():
 def animate():
     return render_template("animate.html")
 
+
+@app.route("/chatbot")
+def chatbot():
+    return render_template("chatbot.html")
+
 @app.route("/techHelp")
 def techhelp():
     return render_template("techHelp.html")
