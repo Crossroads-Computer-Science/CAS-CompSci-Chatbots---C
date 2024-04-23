@@ -78,6 +78,10 @@ def have_fun():
 def song():
     return render_template("SongBot.html")
 
+@app.route('/poland')
+def poland():
+    return render_template("poland.html")
+
 @app.route("/chat")
 def chat_completion():
     prompt = request.args.get('prompt')
