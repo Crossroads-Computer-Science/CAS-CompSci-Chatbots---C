@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Chat</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="bg-primary text-white text-center py-4">
+    <img src="/static/superman.png" alt="Superman Logo" class="img-fluid">
+    <h1>Progress Chatbot</h1>
+    <p>I am Superman Bot! I will save the world and rescue everyone in need!</p>
+</header>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center">Chat Box</h3>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label for="message">Chat:</label>
+                                <textarea disabled class="form-control" id="message" rows="3"></textarea>
+                                <label for="shouldSpeak">Speak</label>
+                                <input type="checkbox" id="shouldSpeak">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <label for="prompt">Prompt:</label>
+                                <input type="text" id="prompt" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-block" id="chatBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('chatBtn').addEventListener('click', fetchJsonData);
+
+    let conversation = [
+        {"role": "system", "content": "Respond to my prompts as if you are Superman"}
+    ];
+
+    function fetchJsonData(event) {
+        event.preventDefault();
+
+        let promptInput = document.getElementById('prompt');
+        let prompt = promptInput.value.trim();
+        promptInput.value = "";
+
+        if (prompt === "") return;
+
+        let messageTextarea = document.getElementById('message');
+        messageTextarea.value += "USER: " + prompt + "\n";
+
+        conversation.push({"role": "user", "content": prompt});
+
+        fetch('/chat?prompt=' + JSON.stringify(conversation))
+            .then(response => response.text())
+            .then(jsonData => {
+                console.log(jsonData);
+
+                if (document.getElementById("shouldSpeak").checked) {
+                    let tts = new SpeechSynthesisUtterance();
+                    tts.text = jsonData;
+                    window.speechSynthesis.speak(tts); // Corrected to 'speechSynthesis'
+                }
+
+                messageTextarea.value += "CHATBOT: " + jsonData + "\n";
+                messageTextarea.scrollTop = messageTextarea.scrollHeight;
+                conversation.push({"role": "assistant", "content": jsonData});
+            })
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+            });
+    }
+</script>
+
+</body>
+</html>
+

@@ -30,6 +30,11 @@ def abobot():
     print(key)
     return render_template("aboBot.html")
 
+@app.route('/super')
+def super():
+    return render_template('superman.html')
+# ___________________
+
 @app.route('/cardJS')
 def cardJS():
     return render_template("cardJS.html")
