@@ -4,7 +4,7 @@ import json
 import os
 
 app = Flask(__name__)
-client = OpenAI(organization='org-T1ygt59uhBvUYWKhAoohAfYP')
+client = OpenAI()
 
 
 @app.route('/')
